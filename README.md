@@ -28,9 +28,11 @@ pip install wandb tqdm tensorboardX scipy scikit-learn h5py termcolor
 ```
 
 ### Download
-Download the dataset from this folder and put it in the ./data/descData/netvlad-pytorch/ folder.
+Download the dataset files from the following link and put all the files in the ./data/descData/netvlad-pytorch/ folder.
+https://drive.google.com/drive/folders/1wraXOQl0Oaj2Lwnx3J3HwxbooJeAbkvQ?usp=sharing
 
 For downloading the pretrained models use this link and put the downloaded folder in ./data/runs
+https://drive.google.com/drive/folders/1Qv_f_Iwt6HwQc-Bmw3ofu6SpYH0crgY2
 
 ## Run
 
