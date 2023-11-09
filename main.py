@@ -53,6 +53,7 @@ parser.add_argument('--ckpt', type=str, default='latest', help='Resume from late
 parser.add_argument('--split', type=str, default='val', help='Data split to use for testing. Default is val', choices=['test', 'train', 'val'])
 parser.add_argument('--numSamples2Project', type=int, default=-1, help='TSNE uses these many samples ([:n]) to project data to 2D; set to -1 to disable')
 parser.add_argument('--extractOnly',  action='store_true', help='extract descriptors')
+parser.add_argument('--useEffnet',  action='store_false', help='To use Effnet or not')
 parser.add_argument('--predictionsFile', type=str, default=None, help='path to prior predictions data')
 parser.add_argument('--seqL_filterData', type=int, help='during testing, db and qry inds will be removed that violate sequence boundaries for this given sequence length')
 
@@ -75,7 +76,7 @@ if __name__ == "__main__":
 
     opt = parser.parse_args()
     if opt.matcher == 'None': opt.matcher = None
-
+    opt.useEffnet = False
     restore_var = ['lr', 'lrStep', 'lrGamma', 'weightDecay', 'momentum', 
             'runsPath', 'savePath', 'optim', 'margin', 'seed', 'patience', 'outDims']
     if not opt.pooling and opt.resume:
@@ -106,6 +107,13 @@ if __name__ == "__main__":
     wandbResume = False if opt.resume == '' or opt.mode == 'test' else True
     wandb.init(project='mavNet_{}'.format(wandb_dataStr),config=opt,resume=wandbResume,anonymous="allow")
     # update runName
+    model_eff_net = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_efficientnet_b0', pretrained=True)
+
+    model_eff_net.eval()
+
+    #if GPU is available
+    device = torch.device("cuda")
+    model_eff_net.to(device)
     runName = wandb.run.name
     if opt.expName != '' and runName is not None: #runName is None when running wandb offline
         wandb.run.name = opt.expName + "-" + runName.split("-")[-1]
@@ -142,7 +150,7 @@ if __name__ == "__main__":
     if opt.mode.lower() == 'test':
         print('===> Running evaluation step')
         epoch = 1
-        recallsOrDesc, dbEmb, qEmb, rAtL, preds = test(opt, model, encoder_dim, device, whole_test_set, writer, epoch, extract_noEval=opt.extractOnly)
+        recallsOrDesc, dbEmb, qEmb, rAtL, preds = test(opt,model_eff_net, model, encoder_dim, device, whole_test_set, writer, epoch, extract_noEval=opt.extractOnly)
         if opt.resultsPath is not None:
             if not exists(opt.resultsPath):
                 makedirs(opt.resultsPath)
@@ -174,7 +182,7 @@ if __name__ == "__main__":
             if opt.optim.upper() == 'SGD':
                 scheduler.step()
             if (epoch % opt.evalEvery) == 0:
-                recalls = test(opt, model, encoder_dim, device, whole_test_set, writer, epoch)[0]
+                recalls = test(opt,model_eff_net, model, encoder_dim, device, whole_test_set, writer, epoch)[0]
                 is_best = recalls[5] > best_score 
                 if is_best:
                     not_improved = 0
