@@ -2,8 +2,9 @@
 
 <p align="center">
   <img src="./assets/mavNet1.png">
+    <br/><em>For Training</em>
   <img src="./assets/mavNet2.png">
-    <br/><em>mavNet: Contrastive Learning with Sequence Matching.</em>
+    <br/><em>For Retrieval</em>
 </p>
 
 ## Setup
@@ -55,12 +56,4 @@ python main.py --mode test --seqL 5 --pooling --dataset oxford-v1.0 --split test
 
 ## Acknowledgement
 The code in this repository is based on [oravus/seqNet](https://github.com/oravus/seqNet) and [Nanne/pytorch-NetVlad](https://github.com/Nanne/pytorch-NetVlad).
-
-#### Other Related Projects
-[SeqNet](https://github.com/oravus/seqNet);
-[Delta Descriptors (2020)](https://github.com/oravus/DeltaDescriptors);
-[Patch-NetVLAD (2021)](https://github.com/QVPR/Patch-NetVLAD);
-[CoarseHash (2020)](https://github.com/oravus/CoarseHash);
-[seq2single (2019)](https://github.com/oravus/seq2single);
-[LoST (2018)](https://github.com/oravus/lostX)
 
