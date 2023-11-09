@@ -1,7 +1,8 @@
 # mavNet
 
 <p align="center">
-  <img src="./assets/mavNet.jpg">
+  <img src="./assets/mavNet1.png">
+  <img src="./assets/mavNet2.png">
     <br/><em>mavNet: Contrastive Learning with Sequence Matching.</em>
 </p>
 
